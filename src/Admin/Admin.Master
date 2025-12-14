@@ -1,0 +1,80 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="Laptop.Admin.AdminMaster" %>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head runat="server">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server"></asp:ContentPlaceHolder> - Quản Trị Laptop Tân Nguyễn</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --primary-color: #ff6600; --primary-dark: #e65c00; --bg-color: #f4f6f9; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-color); color: #333; }
+        a { text-decoration: none; }
+        #sidebar { width: 250px; height: 100vh; position: fixed; top: 0; left: 0; background: var(--primary-color); color: white; transition: all 0.3s; z-index: 1030; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+        .sidebar-header { padding: 20px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 1.2rem; font-weight: 700; text-transform: uppercase; }
+        .sidebar-header a { color: white; }
+        .list-group-item { background: var(--primary-color); color: white; border: none; padding: 12px 20px; font-size: 0.95rem; font-weight: 500; transition: all 0.3s; }
+        .list-group-item:hover, .list-group-item.active { background: var(--primary-dark); color: white; font-weight: 600; }
+        .list-group-item i { margin-right: 10px; font-size: 1.1rem; }
+        #content { width: calc(100% - 250px); margin-left: 250px; padding: 20px; min-height: 100vh; }
+        .admin-navbar { background: #fff; padding: 10px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 6px; }
+        .admin-navbar .logout-btn { color: #dc3545; font-weight: 600; }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <a href='<%= ResolveUrl("~/Default.aspx") %>' class="text-white"><i class="fa-solid fa-laptop-code"></i> TÂN NGUYỄN</a>
+            </div>
+            
+            <div class="list-group list-group-flush">
+                <a href="Dashboard.aspx" class="list-group-item list-group-item-action"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                
+                <div class="list-group-item fw-bold text-uppercase mt-3 small opacity-75">Quản lý bán hàng</div>
+                <a href="QuanLyDonHang.aspx" class="list-group-item list-group-item-action"><i class="fa-solid fa-receipt"></i> Đơn hàng</a>
+                
+                <div class="list-group-item fw-bold text-uppercase mt-3 small opacity-75">Quản lý kho & SP</div>
+                <a href="QuanLySanPham.aspx" class="list-group-item list-group-item-action"><i class="fa-solid fa-box-open"></i> Sản phẩm</a>
+                <a href="QuanLyHangSanXuat.aspx" class="list-group-item list-group-item-action"><i class="fa-solid fa-tags"></i> Hãng sản xuất</a>
+                
+                <a href="QuanLyNhapHang.aspx" class="list-group-item list-group-item-action"><i class="fa-solid fa-dolly"></i> Quản lý Nhập hàng</a>
+              
+                <div class="list-group-item fw-bold text-uppercase mt-3 small opacity-75">Hệ thống</div>
+                <a href="QuanLyTaiKhoan.aspx" class="list-group-item list-group-item-action"><i class="fa-solid fa-users"></i> Tài khoản</a>
+            </div>
+        </nav>
+
+        <div id="content">
+            <div class="admin-navbar d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold m-0 text-secondary"><asp:Label ID="lblPageTitle" runat="server"></asp:Label></h5>
+                <div class="d-flex align-items-center">
+                    <span class="me-3 fw-bold text-dark"><i class="fa-solid fa-user-shield me-1"></i> <asp:Label ID="lblHoTen" runat="server">Admin</asp:Label></span>
+                    <asp:LinkButton ID="btnLogout" runat="server" OnClick="btnLogout_Click" CssClass="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Thoát</asp:LinkButton>
+                </div>
+            </div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+        </div>
+    </form>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var path = window.location.pathname.split('/').pop() || "Dashboard.aspx";
+            document.querySelectorAll('#sidebar a.list-group-item').forEach(function(item) {
+                if (item.getAttribute('href') === path) item.classList.add('active');
+            });
+            var active = document.querySelector('#sidebar a.list-group-item.active');
+            if(active) document.getElementById('<%= lblPageTitle.ClientID %>').textContent = active.textContent.trim();
+        });
+    </script>
+</body>
+</html>
